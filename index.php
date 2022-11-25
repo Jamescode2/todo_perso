@@ -5,6 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>todos</title>
+    <script>
+
+window.addEventListener("load", function(){
+    console.log("page loaded");
+    readall();
+});
+
+</script>
     <style>
 
     body{margin:0;padding:0;font-family:sans-serif;--primary-color:#55b;}
@@ -45,18 +53,23 @@
 
 <!-- fenêtre de mise à jour d'un todo existant -->
 <div class="modal" id="modal2">
+    <div style="width:100%;text-align:right"><span class="closeBtn" onclick="closeEditDialog()">X</span></div>
+    <h2>-- update Todo --</h2>
+    <input type="hidden" id="editId" />
+    <p id="updateContent" class="pseudoTxtarea" contenteditable>&nbsp;</p>
+    <div style="text-align:center;"><span class="pseudoBtn" onclick="updateTodo()">Mettre à jour</span></div>
 </div>
 
 
 <script>
 
-function openCreateDialog(){
-    document.getElementById("modal1").style.display="flex";
-}
+function openCreateDialog(){ document.getElementById("modal1").style.display="flex"; }
 
-function closeCreateDialog(){
-    document.getElementById("modal1").style.display="none";
-}
+function openEditDialog(){ document.getElementById("modal2").style.display="flex"; }
+
+function closeCreateDialog(){ document.getElementById("modal1").style.display="none"; }
+
+function closeEditDialog(){ document.getElementById("modal2").style.display="none"; }
 
 function readall() {
         var xhr = new XMLHttpRequest();
@@ -75,7 +88,7 @@ function readall() {
                 '<p>'+todoJson.important+'</p>'+
                 '</div>'+
                 '<div style="display:flex;justify-content:space-around;">'+
-                '<img src="edit.png">'+
+                '<img src="edit.png" onclick=\'editTodo('+todoJson.id+',\"'+todoJson.content+'\")\'>'+
                 '<img src="flag.png">'+
                 '<img src="color.png">'+
                 '<img src="strike.png">'+
@@ -116,7 +129,27 @@ function readall() {
             document.getElementById("list").innerHTML += todo2html(newTodo);
         }
     }
-    document.getElementById("list").innerHTML = readall();
+    function editTodo(todoId,oldContent){
+    document.getElementById("modal2").style.display="flex";
+    document.getElementById("updateContent").innerText=oldContent;
+    document.getElementById("editId").value=todoId;
+}
+
+function updateTodo(){
+    let id=document.getElementById("editId").value;
+    let newContent=document.getElementById("updateContent").innerText;
+    var xhr=new XMLHttpRequest();
+    xhr.open("GET","update.php?field=content&id="+id+"&newValue="+newContent);
+    xhr.send();
+    xhr.onload=function(){
+        let element=document.getElementById("todo-"+id);
+        let newTodo={};
+        newTodo.id=id;
+        newTodo.content=newContent;
+        element.innerHTML=todo2html(newTodo);
+        document.getElementById("modal2").style.display="none";
+    }
+}
 </script>
 </body>
 
