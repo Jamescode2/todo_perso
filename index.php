@@ -71,7 +71,7 @@ function closeCreateDialog(){ document.getElementById("modal1").style.display="n
 
 function closeEditDialog(){ document.getElementById("modal2").style.display="none"; }
 
-function readall() {
+    function readall() {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "readall.php");
         xhr.send();
@@ -106,14 +106,14 @@ function readall() {
     }
     
 
-        function deleteTodo(todoId){
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "delete.php?id="+todoId);
-        xhr.send();
-        xhr.onload = function () {
-            let reponse = xhr.response;
-        }
-        document.getElementById("todo-"+todoId).style.display = "none";
+    function deleteTodo(todoId){
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "delete.php?id="+todoId);
+    xhr.send();
+    xhr.onload = function () {
+        let reponse = xhr.response;
+    }
+    document.getElementById("todo-"+todoId).style.display = "none";
     }
 
     function createTodo() {
@@ -133,23 +133,23 @@ function readall() {
     document.getElementById("modal2").style.display="flex";
     document.getElementById("updateContent").innerText=oldContent;
     document.getElementById("editId").value=todoId;
-}
-
-function updateTodo(){
-    let id=document.getElementById("editId").value;
-    let newContent=document.getElementById("updateContent").innerText;
-    var xhr=new XMLHttpRequest();
-    xhr.open("GET","update.php?field=content&id="+id+"&newValue="+newContent);
-    xhr.send();
-    xhr.onload=function(){
-        let element=document.getElementById("todo-"+id);
-        let newTodo={};
-        newTodo.id=id;
-        newTodo.content=newContent;
-        element.innerHTML=todo2html(newTodo);
-        document.getElementById("modal2").style.display="none";
     }
-}
+
+    function updateTodo(){
+        let id=document.getElementById("editId").value;
+        let newContent=document.getElementById("updateContent").innerText;
+        var xhr=new XMLHttpRequest();
+        xhr.open("GET","update.php?field=content&id="+id+"&newValue="+newContent);
+        xhr.send();
+        xhr.onload=function(){
+            let element=document.getElementById("todo-"+id);
+            let newTodo={};
+            newTodo.id=id;
+            newTodo.content=newContent;
+            element.innerHTML=todo2html(newTodo);
+            document.getElementById("modal2").style.display="none";
+        }
+    }
 </script>
 </body>
 
